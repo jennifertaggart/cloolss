@@ -38,5 +38,5 @@ for item in possiblebottoms:
 print("That's all I can do right now, bye!")	
 
 # TO DO: Generate three sample outfits (print them out)
-# TO DO: 
+# TO DO: Use Google AppEngine SDK and Google Appengine to put on web (see realpython article)
 # TO DO: Implement js with localstorage for washed/not washed, have a "did laundry" button that sets everything to washed again
