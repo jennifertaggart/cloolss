@@ -3,6 +3,7 @@ Run me with the Python interpreter for now.
 I read in formatted data files of clothing items and print out outfits.
 I am in pre-beta.
 """
+import random
 import glob
 files = glob.glob('./*.txt')
 config = open('cloolss.cfg').read()
@@ -24,43 +25,73 @@ def clothing_type(clothingitem):
     layering_types = ['sweater', 'blazer']
     accessory_types = ['scarf','hat']
     for bottom in bottom_types:
-        if (clothing_item[0] == 'bottom'):
+        if (clothing_item[0] == bottom):
             possible_bottoms.append(clothing_item)
+            print("Added pants or shorts or skirt!")
     for layer in layering_types:
-        if (clothing_item[0] == 'layer'):
+        if (clothing_item[0] == layer):
             possible_layers.append(clothing_item)
+            print("Added layer!")
     for accessory in accessory_types:
-        if (clothing_item[0] == 'accessory'):
+        if (clothing_item[0] == accessory):
             possible_accessories.append(clothing_item)
+            print("Added accessory!")
     if (clothing_item[3].isdigit()):
-        possible_tops.append(clothing_item)                            
+        possible_tops.append(clothing_item)
+        print("Added top!")                        
     
 
-def match(outfit, clothingitem):
-    """Tests whether a new clothing item matches any items in outfit by 
-    looping over all colors in outfit and checking them against all colors 
-    in the new clothing item returns match if any two colors match
+def match(thing_collection, new_thing):
+    """Tests whether a new thing matches any items in a collection of 
+    existing things by looping over all colors in collection and 
+    checking them against all colors in the new thing. Returns match 
+    if any two colors match.
     """
-    outfit_colors = outfit[1]
-    clothing_item_colors = clothing_item[1]
-    for color in outfit_colors:
-        print(color)
-        for anothercolor in clothing_item_colors:
-            print(anothercolor)
+    # Had to rather aggressively tell python these were lists, may be
+    # better way to do this
+    collection_colors = thing_collection[1].split()
+    print("Collection colors are")
+    print(collection_colors)
+    print(len(collection_colors))
+    new_thing_colors = new_thing[1].split()
+    print("New thing colors are")
+    print(new_thing_colors)
+    for color in collection_colors:
+        #print(color)
+        for anothercolor in new_thing_colors:
+            #print(anothercolor)
             if (color == anothercolor):
                 print("Match!")
                 return match 	
 
 def create_outfit():
-    print("Outfit created!")               			
+    """Choose a random bottom and append it to outfit.
+    """
+    outfit = []
+    choose_bottom = random.randint(0,(len(possible_bottoms)-1))
+    print(choose_bottom)
+    bottom = possible_bottoms[choose_bottom]
+    print("Chosen bottom is:")
+    print(bottom)
+    outfit.append(bottom)
+    choose_top = random.randint(0,(len(possible_tops)-1))
+    top = possible_tops[choose_top]
+    print("Chosen top is:")
+    print(top)
+    if match(bottom, top):
+        print("Outfit created!")
+        outfit.append(top)
+        print(outfit)
+    else:
+        print("Go to the store!")                   			
 
 #Define outfit and clothing item for testing
-outfit = ['scarf', ['purple'], 'loose fitting', 'NA', 'gauze', 'seasonless', 
-'clean']
-clothing_item = ['scarf', ['yellow', 'green', 'dark green', 'brown', 'pink', 
-'baby blue', 'orange', 'black'], 'loose fitting', 'NA', 'gauze', 'seasonless'
-, 'clean']
-match(outfit, clothing_item)
+#outfit = ['scarf', ['purple'], 'loose fitting', 'NA', 'gauze', 'seasonless', 
+#'clean']
+#clothing_item = ['scarf', ['yellow', 'green', 'dark green', 'brown', 'pink', 
+#'baby blue', 'orange', 'black'], 'loose fitting', 'NA', 'gauze', 'seasonless'
+#, 'clean']
+#match(outfit, clothing_item)
 
 print("Hello World, I'm CLOOLSS!")
 print("CLothing Organizer/Optimizer Logical Style System!")
@@ -81,8 +112,14 @@ for file in files:
 	# per entry
 	clothing_item = open(file).read().splitlines() 
 	if clean_and_in_season(clothing_item):
+		#print("Item is clean and in season!")
 		clothing_type(clothing_item)
-		print("Item is clean and in season!")
+		#print("I found out what type of clothing")
+ 
+#print(possible_bottoms[0])
+create_outfit()
+#print(possible_accessories[0])
+		#print("Item is clean and in season!")
 		
 print("That's all I can do right now, bye!")	
 
