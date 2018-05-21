@@ -50,6 +50,10 @@ def match(thing_collection, new_thing):
     # Had to rather aggressively tell python these were lists, may be
     # better way to do this
     collection_colors = thing_collection[1].split()
+    # Read these from a config file using configpaeser eventually
+    neutrals = ['black', 'white', 'indigo', 'nude', 'brown', 'tan', 'khaki', 
+    'navy', 'gray']
+    collection_colors = collection_colors + neutrals
     print("Collection colors are")
     print(collection_colors)
     print(len(collection_colors))
@@ -79,9 +83,13 @@ def create_outfit():
     print("Chosen top is:")
     print(top)
     if match(bottom, top):
-        print("Outfit created!")
         outfit.append(top)
-        print(outfit)
+        choose_accessory = random.randint(0,(len(possible_accesories)-1))
+        if match(outfit,accessory):
+            outfit.append(accessory)
+            print("Outfit created!")
+            print(outfit)
+
     else:
         print("Go to the store!")                   			
 
