@@ -27,18 +27,18 @@ def clothing_type(clothingitem):
     for bottom in bottom_types:
         if (clothing_item[0] == bottom):
             possible_bottoms.append(clothing_item)
-            print("Added pants or shorts or skirt!")
+            #print("Added pants or shorts or skirt!")
     for layer in layering_types:
         if (clothing_item[0] == layer):
             possible_layers.append(clothing_item)
-            print("Added layer!")
+            #print("Added layer!")
     for accessory in accessory_types:
         if (clothing_item[0] == accessory):
             possible_accessories.append(clothing_item)
-            print("Added accessory!")
+            #print("Added accessory!")
     if (clothing_item[3].isdigit()):
         possible_tops.append(clothing_item)
-        print("Added top!")                        
+        #print("Added top!")                        
     
 
 def match(thing_collection, new_thing):
@@ -47,13 +47,13 @@ def match(thing_collection, new_thing):
     checking them against all colors in the new thing. Returns match 
     if any two colors match.
     """
-    # Had to rather aggressively tell python these were lists, may be
-    # better way to do this
-    collection_colors = thing_collection[1].split()
+    thing_collection_colors_line = thing_collection[1]
+    collection_colors = thing_collection_colors_line.strip("][,''").split()
     print("Collection colors are")
     print(collection_colors)
     print(len(collection_colors))
-    new_thing_colors = new_thing[1].split()
+    new_thing_colors_line = new_thing[1]
+    new_thing_colors = new_thing_colors_line.strip("][").split()
     print("New thing colors are")
     print(new_thing_colors)
     for color in collection_colors:
