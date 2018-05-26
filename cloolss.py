@@ -48,12 +48,12 @@ def match(thing_collection, new_thing):
     if any two colors match.
     """
     thing_collection_colors_line = thing_collection[1]
-    collection_colors = thing_collection_colors_line.strip("][,''").split()
+    collection_colors = thing_collection_colors_line.strip("][").split(",")
     print("Collection colors are")
     print(collection_colors)
     print(len(collection_colors))
     new_thing_colors_line = new_thing[1]
-    new_thing_colors = new_thing_colors_line.strip("][").split()
+    new_thing_colors = new_thing_colors_line.strip("][").split(",")
     print("New thing colors are")
     print(new_thing_colors)
     for color in collection_colors:
