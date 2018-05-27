@@ -60,6 +60,8 @@ def match(thing_collection, new_thing):
     thing_collection_colors_line = re.sub(r'\'|\[|\]|\"', '', thing_collection_colors_line)
     #print(thing_collection_colors_line)
     collection_colors = thing_collection_colors_line.split(",")
+    #neutrals = ['black', 'white', 'indigo', 'nude', 'brown', 'tan', 'khaki', 'navy', 'gray']
+    #collection_colors = collection_colors.extend(neutrals)
     print("Collection colors are")
     print(collection_colors)
     #print(len(collection_colors))
