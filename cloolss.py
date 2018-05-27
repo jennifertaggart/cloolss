@@ -37,7 +37,10 @@ def clothing_type(clothingitem):
             #print("Added accessory!")
     if (clothing_item[3].isdigit()):
         possible_tops.append(clothing_item)
-        #print("Added top!")                        
+        #print("Added top!") 
+    if (clothing_item[0] == "shoes"): 
+        print("It's a shoe!")
+        possible_shoes.append(clothing_item)                          
     
 
 def match(thing_collection, new_thing, add_neutrals):
@@ -108,10 +111,10 @@ def create_outfit():
         outfit.append(top)
         choose_accessory = random.randint(0,(len(possible_accessories)-1))
         accessory = possible_accessories[choose_accessory]
-        #print("Accessorize with")
-        #print(accessory)
-        #if match(outfit, accessory, 0):
         outfit.append(accessory)
+        choose_shoes = random.randint(0,(len(possible_shoes)-1))
+        shoes = possible_shoes[choose_shoes]
+        outfit.append(shoes)
         print("Outfit created! Here's what to wear:")
         print(outfit)
         return True
@@ -120,7 +123,7 @@ def create_outfit():
         create_outfit()
         return False
                       			
-# Main program, need to make this a function without breaking it!  
+# Main program, need to make this a function, deal with variable scope issues 
 files = glob.glob('./*.txt')
 #config = open('cloolss.cfg').read()
 print("Hello, I'm CLOOLSS!")
@@ -134,6 +137,7 @@ possible_bottoms = []
 possible_tops = []
 possible_layers = []
 possible_accessories = []
+possible_shoes = []
 
 # Shoes and scarves
 for file in files:
@@ -149,6 +153,8 @@ for file in files:
 create_outfit()
 
 print("That's all I can do right now, bye!")	
+
+   
 
 # TO DO: Generate three sample outfits (print them out)
 # TO DO: Implement in js with localstorage for washed/not washed, have a 
