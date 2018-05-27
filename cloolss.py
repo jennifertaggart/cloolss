@@ -36,7 +36,7 @@ def clothing_type(clothingitem):
     for accessory in accessory_types:
         if (clothing_item[0] == accessory):
             possible_accessories.append(clothing_item)
-            #print("Added accessory!")
+            print("Added accessory!")
     if (clothing_item[3].isdigit()):
         possible_tops.append(clothing_item)
         #print("Added top!")                        
@@ -48,13 +48,9 @@ def match(thing_collection, new_thing):
     checking them against all colors in the new thing. Returns match 
     if any two colors match.
     """
-    # Had to rather aggressively tell python these were lists, may be
-    # better way to do this
-    collection_colors = thing_collection[1].split()
     # Read these from a config file using configpaeser eventually
     neutrals = ['black', 'white', 'indigo', 'nude', 'brown', 'tan', 'khaki', 
     'navy', 'gray']
-    collection_colors = collection_colors + neutrals
     # Having a hell of a time passing my arrays for clothing items to this 
     # function as arrays. *arg1 doesn't work because there are two arrays I'm
     # passing in, I think. So I am ending up with a string. Using split and 
@@ -66,15 +62,14 @@ def match(thing_collection, new_thing):
     # it an array.
     thing_collection_colors_line = re.sub(r'\'|\[|\]|\"', '', thing_collection_colors_line)
     #print(thing_collection_colors_line)
-    collection_colors = thing_collection_colors_line.split(",")
-    #neutrals = ['black', 'white', 'indigo', 'nude', 'brown', 'tan', 'khaki', 'navy', 'gray']
+    collection_colors = thing_collection_colors_line.split(",") + neutrals
     #collection_colors = collection_colors.extend(neutrals)
     print("Collection colors are")
     print(collection_colors)
     #print(len(collection_colors))
     new_thing_colors_line = new_thing[1]
     new_thing_colors_line = re.sub(r'\'|\[|\]|\"', '', new_thing_colors_line)
-    print(new_thing_colors_line)
+    #print(new_thing_colors_line)
     new_thing_colors = new_thing_colors_line.split(",")
     #new_thing_colors = new_thing_colors_line.strip("][").split(",")
     print("New thing colors are")
@@ -103,11 +98,14 @@ def create_outfit():
     print(top)
     if match(bottom, top):
         outfit.append(top)
-        choose_accessory = random.randint(0,(len(possible_accesories)-1))
-        if match(outfit,accessory):
-            outfit.append(accessory)
-            print("Outfit created!")
-            print(outfit)
+        choose_accessory = random.randint(0,(len(possible_accessories)-1))
+        accessory = possible_accessories[choose_accessory]
+        print("Accessorize with")
+        print(accessory)
+        #if match(outfit,accessory):
+        outfit.append(accessory)
+        print("Outfit created!")
+        print(outfit)
 
     else:
         print("Go to the store!")                   			
