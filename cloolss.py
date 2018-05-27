@@ -6,8 +6,6 @@ I am in pre-beta.
 import random
 import glob
 import re
-files = glob.glob('./*.txt')
-config = open('cloolss.cfg').read()
 
 # Do LOTS of checking to make sure files are formatted correctly
 #def checkfiles ()
@@ -36,21 +34,26 @@ def clothing_type(clothingitem):
     for accessory in accessory_types:
         if (clothing_item[0] == accessory):
             possible_accessories.append(clothing_item)
-            print("Added accessory!")
+            #print("Added accessory!")
     if (clothing_item[3].isdigit()):
         possible_tops.append(clothing_item)
         #print("Added top!")                        
     
 
-def match(thing_collection, new_thing):
+def match(thing_collection, new_thing, add_neutrals):
     """Tests whether a new thing matches any items in a collection of 
     existing things by looping over all colors in collection and 
     checking them against all colors in the new thing. Returns match 
     if any two colors match.
     """
-    # Read these from a config file using configpaeser eventually
-    neutrals = ['black', 'white', 'indigo', 'nude', 'brown', 'tan', 'khaki', 
-    'navy', 'gray']
+    # Only add the neutral colors if the add_neutrals flag is set, so we don't 
+    # add them every time we match something
+    if (add_neutrals == 1):
+        # Read these from a config file using configpaeser eventually
+        neutrals = ['black', 'white', 'indigo', 'nude', 'brown', 'tan', 
+        'khaki', 'navy', 'gray']
+    else:
+        neutrals = []    
     # Having a hell of a time passing my arrays for clothing items to this 
     # function as arrays. *arg1 doesn't work because there are two arrays I'm
     # passing in, I think. So I am ending up with a string. Using split and 
@@ -80,7 +83,10 @@ def match(thing_collection, new_thing):
             #print(anothercolor)
             if (color == anothercolor):
                 print("Match!")
-                return match 	
+                collection_colors = collection_colors + new_thing_colors
+                print("New collection colors are:")
+                print(collection_colors)
+                return collection_colors 	
 
 def create_outfit():
     """Choose a random bottom and append it to outfit.
@@ -89,36 +95,35 @@ def create_outfit():
     choose_bottom = random.randint(0,(len(possible_bottoms)-1))
     print(choose_bottom)
     bottom = possible_bottoms[choose_bottom]
-    print("Chosen bottom is:")
+    #print("Chosen bottom is:")
     print(bottom)
     outfit.append(bottom)
     choose_top = random.randint(0,(len(possible_tops)-1))
     top = possible_tops[choose_top]
-    print("Chosen top is:")
+    #print("Chosen top is:")
     print(top)
-    if match(bottom, top):
+    # Match with neutrals flag set to get neutral items added to color
+    # collection
+    if match(bottom, top, 0):
         outfit.append(top)
         choose_accessory = random.randint(0,(len(possible_accessories)-1))
         accessory = possible_accessories[choose_accessory]
-        print("Accessorize with")
-        print(accessory)
-        #if match(outfit,accessory):
+        #print("Accessorize with")
+        #print(accessory)
+        #if match(outfit, accessory, 0):
         outfit.append(accessory)
-        print("Outfit created!")
+        print("Outfit created! Here's what to wear:")
         print(outfit)
-
+        return True
     else:
-        print("Go to the store!")                   			
-
-#Define outfit and clothing item for testing
-#outfit = ['scarf', ['purple'], 'loose fitting', 'NA', 'gauze', 'seasonless', 
-#'clean']
-#clothing_item = ['scarf', ['yellow', 'green', 'dark green', 'brown', 'pink', 
-#'baby blue', 'orange', 'black'], 'loose fitting', 'NA', 'gauze', 'seasonless'
-#, 'clean']
-#match(outfit, clothing_item)
-
-print("Hello World, I'm CLOOLSS!")
+        print("Fail! Trying again...")
+        create_outfit()
+        return False
+                      			
+# Main program, need to make this a function without breaking it!  
+files = glob.glob('./*.txt')
+#config = open('cloolss.cfg').read()
+print("Hello, I'm CLOOLSS!")
 print("CLothing Organizer/Optimizer Logical Style System!")
 #Arrays are called lists in python whyyyyy
 # clothingdatabase is going to be the working database of items of clean 
@@ -132,22 +137,19 @@ possible_accessories = []
 
 # Shoes and scarves
 for file in files:
-	# TO DO: need to do LOTS of validation of input here!
-	# Open the file, read in the lines, and split into an array with one line
-	# per entry
-	clothing_item = open(file).read().splitlines() 
-	if clean_and_in_season(clothing_item):
-		#print("Item is clean and in season!")
-		clothing_type(clothing_item)
-		#print("I found out what type of clothing")
- 
-#print(possible_bottoms[0])
+    # TO DO: need to do LOTS of validation of input here!
+    # Open the file, read in the lines, and split into an array with one line
+    # per entry
+    clothing_item = open(file).read().splitlines() 
+    if clean_and_in_season(clothing_item):
+	    #print("Item is clean and in season!")
+	    clothing_type(clothing_item)
+	    #print("I found out what type of clothing")
+
 create_outfit()
-#print(possible_accessories[0])
-		#print("Item is clean and in season!")
-		
+
 print("That's all I can do right now, bye!")	
 
 # TO DO: Generate three sample outfits (print them out)
-# TO DO: Use Google AppEngine SDK and Google Appengine to put on web (see realpython article)
-# TO DO: Implement js with localstorage for washed/not washed, have a "did laundry" button that sets everything to washed again
+# TO DO: Implement in js with localstorage for washed/not washed, have a 
+# "did laundry" button that sets everything to washed again
