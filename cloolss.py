@@ -28,7 +28,7 @@ def validate_input():
     if (valid_item_flag == 0):
             print("Problem in first line!")
             error_stuff()
-    print(clothing_item[1])
+    #print(clothing_item[1])
     if ((clothing_item[2] != 'loose-fitting') and (clothing_item[2] != 'close-fitting')):
         if ((clothing_item[2] != 'NA') and (clothing_item[2] != 'N/A')):
             print("Problem in 3rd line")
@@ -39,7 +39,8 @@ def validate_input():
         if (re.search("$\]", clothing_item[2]) != 'None'):
             #all_my_little_quotes = re.search("\[", clothing_item[2])
             #print(all_my_little_quotes)
-            print("Maybe I have a list!")
+            #print("Maybe I have a list!")
+            pass #finish this later
 #new_thing_colors_line = re.sub(r'\'|\[|\]|\"', '', new_thing_colors_line)
  #   if isinstance(check_list,list):
   #      print("Test list success!")        
@@ -62,7 +63,7 @@ def validate_input():
     if ((clothing_item[6] != 'clean') and (clothing_item[6] != 'wash')):
         print("Problem in 7th line!")
         error_stuff()
-    print(clothing_item[6])        
+    #print(clothing_item[6])        
 
 def clean_and_in_season(thing):
     """Test whether clothing is clean and in-season."""
@@ -93,7 +94,7 @@ def clothing_type(thing):
         possible_tops.append(clothing_item)
         #print("Added top!") 
     if (clothing_item[0] == "shoes"): 
-        print("It's a shoe!")
+        #print("It's a shoe!")
         possible_shoes.append(clothing_item)                          
     
 
@@ -124,16 +125,16 @@ def match(thing_collection, new_thing, add_neutrals):
     #print(thing_collection_colors_line)
     collection_colors = thing_collection_colors_line.split(",") + neutrals
     #collection_colors = collection_colors.extend(neutrals)
-    print("Collection colors are")
-    print(collection_colors)
+    #print("Collection colors are")
+    #print(collection_colors)
     #print(len(collection_colors))
     new_thing_colors_line = new_thing[1]
     new_thing_colors_line = re.sub(r'\'|\[|\]|\"', '', new_thing_colors_line)
     #print(new_thing_colors_line)
     new_thing_colors = new_thing_colors_line.split(",")
     #new_thing_colors = new_thing_colors_line.strip("][").split(",")
-    print("New thing colors are")
-    print(new_thing_colors)
+    #print("New thing colors are")
+    #print(new_thing_colors)
     for color in collection_colors:
         #print(color)
         for anothercolor in new_thing_colors:
@@ -145,20 +146,47 @@ def match(thing_collection, new_thing, add_neutrals):
                 print(collection_colors)
                 return collection_colors 	
 
+def convert_to_celsius(temp):
+    return((temp - 32)/1.8)
+
+def clo_test():
+    print("Clo test called!")
+    while True:
+        try:
+            low = float(input("What is the expected low (F)?")) 
+            break 
+        except ValueError:
+            print("I need a number, like 50 or 42.3")  
+    while True:         
+        try:       
+            high = float(input("What is the expected high (F)?"))
+            break
+        except ValueError:
+            print("I need a number, like 76 or 100.5")
+    if (high < low):
+        print("Low is greater than high? I'm confused...")
+        exit(1)
+    low_c = convert_to_celsius(low)
+    high_c = convert_to_celsius(high)
+    print(low_c) 
+    print(high_c)
+    #clo_for_low = 
+    #clo_for_high =     
+
 def create_outfit():
     """Choose a random bottom and append it to outfit.
     """
     outfit = []
     choose_bottom = random.randint(0,(len(possible_bottoms)-1))
-    print(choose_bottom)
+    #print(choose_bottom)
     bottom = possible_bottoms[choose_bottom]
     #print("Chosen bottom is:")
-    print(bottom)
+    #print(bottom)
     outfit.append(bottom)
     choose_top = random.randint(0,(len(possible_tops)-1))
     top = possible_tops[choose_top]
     #print("Chosen top is:")
-    print(top)
+    #print(top)
     # Match with neutrals flag set to get neutral items added to color
     # collection
     if match(bottom, top, 0):
@@ -182,6 +210,8 @@ def main():
     print("CLothing Organizer/Optimizer Logical Style System!")
     print("I am in pre-beta.")
     files = glob.glob('./*.txt')
+    # Get the input highs and lows
+    clo_test()
     # I am probably not supposed to be declaring a whole bunch of global 
     # variables in my main function. Figure out better way to do this. 
     global season, clothing_database, possible_bottoms, possible_tops 
