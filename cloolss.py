@@ -1,3 +1,4 @@
+# Run with python interpreter for now python cloolss.py or python cloolss_demo.py
 """ I am CLothing Organizer/Optimizer Logical Style System!
 Run me with the Python interpreter for now.
 I read in formatted data files of clothing items and print out outfits.
@@ -17,8 +18,10 @@ def error_stuff():
 
 def validate_input():
     """ Test the clothing files for valid input. Line 1 must match something 
-    in valid clothing item array. Line 4 must be a number, or NA, or N/A. Line 5 is not checked because
-    we aren't doing anything with it yet. Other lines must match set of 2 or 3 specific sctrings, or NA or N/A
+    in valid clothing item array. Have not written test for line 2 (colors)
+    yet. Line 4 must be a number, or NA, or N/A. Line 5 is not checked because
+    we aren't doing anything with it yet. Other lines must match set of 2 
+    or 3 specific strings, or NA or N/A
     """
     valid_clothing_items = ['shirt', 'shoes', 'scarf', 'hat', 'dress', 'skirt', 'pants', 'shorts', 'sweater', 'blazer']
     valid_item_flag = 0
@@ -28,26 +31,20 @@ def validate_input():
     if (valid_item_flag == 0):
             print("Problem in first line!")
             error_stuff()
-    #print(clothing_item[1])
+    # TO DO: Implement input validation for line 2, the colors list.        
+    # Line 2 is read as a string, so can't just check if type is list.
+    # Check for beging with [', end with '], and an even number of 's
+    #if (re.search("^\[", clothing_item[1]) != 'None'):
+        #if (re.search("$\]", clothing_item[1]) != 'None'):
+        #all_my_little_quotes = re.search("\[", clothing_item[2])
+            #print(all_my_little_quotes)
+            #print("Maybe I have a list!")
+            #finish this later
     if ((clothing_item[2] != 'loose-fitting') and (clothing_item[2] != 'close-fitting')):
         if ((clothing_item[2] != 'NA') and (clothing_item[2] != 'N/A')):
             print("Problem in 3rd line")
             error_stuff()
-    # Line 2 is read as a string, so can't just check if type is list.
-    # Check for beging with [', end with '], and an even number of 's
-    if (re.search("^\[", clothing_item[2]) != 'None'):
-        if (re.search("$\]", clothing_item[2]) != 'None'):
-            #all_my_little_quotes = re.search("\[", clothing_item[2])
-            #print(all_my_little_quotes)
-            #print("Maybe I have a list!")
-            pass #finish this later
-#new_thing_colors_line = re.sub(r'\'|\[|\]|\"', '', new_thing_colors_line)
- #   if isinstance(check_list,list):
-  #      print("Test list success!")        
-   # if not isinstance(clothing_item[2],str):
-    #    print("I am not a list!")
-     #   error_stuff()  
-    # Can try live in the middle of a function like this?          
+    # TO DO: Can try live in the middle of a function like this? Make better.          
     try:
         return float(clothing_item[3])
     except ValueError:
@@ -62,8 +59,7 @@ def validate_input():
                 error_stuff()
     if ((clothing_item[6] != 'clean') and (clothing_item[6] != 'wash')):
         print("Problem in 7th line!")
-        error_stuff()
-    #print(clothing_item[6])        
+        error_stuff()     
 
 def clean_and_in_season(thing):
     """Test whether clothing is clean and in-season."""
@@ -81,20 +77,15 @@ def clothing_type(thing):
     for bottom in bottom_types:
         if (clothing_item[0] == bottom):
             possible_bottoms.append(clothing_item)
-            #print("Added pants or shorts or skirt!")
     for layer in layering_types:
         if (clothing_item[0] == layer):
             possible_layers.append(clothing_item)
-            #print("Added layer!")
     for accessory in accessory_types:
         if (clothing_item[0] == accessory):
             possible_accessories.append(clothing_item)
-            #print("Added accessory!")
     if (clothing_item[3].isdigit()):
         possible_tops.append(clothing_item)
-        #print("Added top!") 
     if (clothing_item[0] == "shoes"): 
-        #print("It's a shoe!")
         possible_shoes.append(clothing_item)                          
     
 
@@ -102,12 +93,12 @@ def match(thing_collection, new_thing, add_neutrals):
     """Tests whether a new thing matches any items in a collection of 
     existing things by looping over all colors in collection and 
     checking them against all colors in the new thing. Returns match 
-    if any two colors match.
+    if any two colors match. Neutrals always match.
     """
     # Only add the neutral colors if the add_neutrals flag is set, so we don't 
     # add them every time we match something
     if (add_neutrals == 1):
-        # Read these from a config file using configpaeser eventually
+        # Read these from a config file using configparser eventually
         neutrals = ['black', 'white', 'indigo', 'nude', 'brown', 'tan', 
         'khaki', 'navy', 'gray']
     else:
@@ -122,34 +113,29 @@ def match(thing_collection, new_thing, add_neutrals):
     # array (I mean list) except the commas, then split on the commas to make 
     # it an array.
     thing_collection_colors_line = re.sub(r'\'|\[|\]|\"', '', thing_collection_colors_line)
-    #print(thing_collection_colors_line)
     collection_colors = thing_collection_colors_line.split(",") + neutrals
-    #collection_colors = collection_colors.extend(neutrals)
-    #print("Collection colors are")
-    #print(collection_colors)
-    #print(len(collection_colors))
     new_thing_colors_line = new_thing[1]
     new_thing_colors_line = re.sub(r'\'|\[|\]|\"', '', new_thing_colors_line)
-    #print(new_thing_colors_line)
     new_thing_colors = new_thing_colors_line.split(",")
-    #new_thing_colors = new_thing_colors_line.strip("][").split(",")
-    #print("New thing colors are")
-    #print(new_thing_colors)
     for color in collection_colors:
-        #print(color)
         for anothercolor in new_thing_colors:
-            #print(anothercolor)
             if (color == anothercolor):
                 print("Match!")
                 collection_colors = collection_colors + new_thing_colors
-                print("New collection colors are:")
-                print(collection_colors)
+                #print("New collection colors are:")
+                #print(collection_colors)
                 return collection_colors 	
 
 def convert_to_celsius(temp):
     return((temp - 32)/1.8)
 
 def clo_test():
+    """ TO DO: Not finished. Will return min and max clo values needed for 
+    outfit given min/max temps for day. Gets the expected high and low temps 
+    from user input. Uses conversion to floating point as guardian and asks 
+    again if float() fails. Tests high > low, but it exits program, should 
+    also ask again for that. Calls convert to celsius.
+    """
     print("Clo test called!")
     while True:
         try:
@@ -168,14 +154,19 @@ def clo_test():
         exit(1)
     low_c = convert_to_celsius(low)
     high_c = convert_to_celsius(high)
-    print(low_c) 
-    print(high_c)
+    print("Right now I just convert to Celsius")
+    # TO DO: Learn about formatstrings
+    print("Low in Celsius:", low_c) 
+    print("High in Celsius:", high_c)
     #clo_for_low = 
     #clo_for_high =     
 
 def create_outfit():
-    """Choose a random bottom and append it to outfit.
+    """Chooses a random bottom and appends it to (empty) outfit. Chooses a 
+    top and calls match function. Append a random accessory and shoe, then
+    print outfit as a nested list.
     """
+    # TO DO: Make it stop putting shirts on dresses.
     outfit = []
     choose_bottom = random.randint(0,(len(possible_bottoms)-1))
     #print(choose_bottom)
@@ -244,6 +235,5 @@ main()
 # "did laundry" button that sets everything to washed again
 # Set up your own neutrals
 # Pants length/ heel height checking module
-# Better outfit insulation estimation with clo
 # Shoe rest rule where shoes have to rest x number of days after they are worn
 # Should do some unit testing
