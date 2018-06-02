@@ -129,6 +129,14 @@ def match(thing_collection, new_thing, add_neutrals):
 def convert_to_celsius(temp):
     return((temp - 32)/1.8)
 
+def get_clo(celsius_temp):
+    """ Computes clo value needed for sedentary activieites (ie working in my
+    office) for a given aur temp. Not a lot of info online re clo needed for 
+    office temps. This is based on a chart I found for 10-20 degrees C 
+    (50-68 degrees F).
+    """
+    return(4.15 - 0.15*celsius_temp)    
+
 def clo_test():
     """ TO DO: Not finished. Will return min and max clo values needed for 
     outfit given min/max temps for day. Gets the expected high and low temps 
@@ -158,8 +166,10 @@ def clo_test():
     # TO DO: Learn about formatstrings
     print("Low in Celsius:", low_c) 
     print("High in Celsius:", high_c)
-    #clo_for_low = 
-    #clo_for_high =     
+    clo_for_low = get_clo(low_c)
+    clo_for_high = get_clo(high_c)
+    print("Clo needed for high:", clo_for_low) 
+    print("Clo needed for low:", clo_for_high) 
 
 def create_outfit():
     """Chooses a random bottom and appends it to (empty) outfit. Chooses a 
