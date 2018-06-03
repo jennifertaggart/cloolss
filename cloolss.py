@@ -59,7 +59,8 @@ def validate_input():
                 error_stuff()
     if ((clothing_item[6] != 'clean') and (clothing_item[6] != 'wash')):
         print("Problem in 7th line!")
-        error_stuff()     
+        error_stuff()
+        # TO DO: Check that line 8 is a number     
 
 def clean_and_in_season(thing):
     """Test whether clothing is clean and in-season."""
@@ -67,6 +68,7 @@ def clean_and_in_season(thing):
     	if (clothing_item[5] == season or clothing_item[5] == "seasonless"):
     		return True
 
+# I bet that nothing is actually being passed as an argument here.
 def clothing_type(thing):
     """Test whether clothing item is a top, bottom, layer, or accessory 
     and add it to the appropriate array.
@@ -88,7 +90,8 @@ def clothing_type(thing):
     if (clothing_item[0] == "shoes"): 
         possible_shoes.append(clothing_item)                          
     
-
+# I think these are not passed as arguments actually, they are just global
+# variables
 def match(thing_collection, new_thing, add_neutrals):
     """Tests whether a new thing matches any items in a collection of 
     existing things by looping over all colors in collection and 
@@ -137,8 +140,8 @@ def get_clo(celsius_temp):
     """
     return(4.15 - 0.15*celsius_temp)    
 
-def clo_test():
-    """ TO DO: Not finished. Will return min and max clo values needed for 
+def input_temps():
+    """ TO DO: Not finished. Returns min and max clo values needed for 
     outfit given min/max temps for day. Gets the expected high and low temps 
     from user input. Uses conversion to floating point as guardian and asks 
     again if float() fails. Tests high > low, but it exits program, should 
@@ -168,8 +171,31 @@ def clo_test():
     print("High in Celsius:", high_c)
     clo_for_low = get_clo(low_c)
     clo_for_high = get_clo(high_c)
-    print("Clo needed for high:", clo_for_low) 
-    print("Clo needed for low:", clo_for_high) 
+    print("Clo needed for low:", clo_for_low) 
+    print("Clo needed for high:", clo_for_high) 
+    return (clo_for_low, clo_for_high)
+
+# Need to have some of these arguments be optional as outfit is not always 
+# four pieces
+def clo_test(clo_low, clo_high, piece1, piece2, piece3, piece4): 
+    """   
+    Start with basic test that outfit clo is not too high for low or too low 
+    for the high. That is, at some point in the day, the outfit should be 
+    comfortable. Assume wearing socks and underwear. Base clo should be in 
+    the config file eventually so people can customize without changing the 
+    code.
+    """
+    base_clo = 0.06
+    outfit_clo = base_clo
+    # Replace this with a for loop looping over each outfit item eventually
+    outfit_clo = outfit_clo + float(piece1) + float(piece2) + float(piece3) + float(piece4)
+    print("Outfit clo is", outfit_clo)
+    if ((outfit_clo < clo_low) and (outfit_clo > clo_high)):  
+        print("Outfit passed clo test!")
+        return True
+    else:   
+        print("Outfit failed clo test!")    
+        return False
 
 def create_outfit():
     """Chooses a random bottom and appends it to (empty) outfit. Chooses a 
@@ -200,11 +226,12 @@ def create_outfit():
         outfit.append(shoes)
         print("Outfit created! Here's what to wear:")
         print(outfit)
-        return True
+        return (True, bottom[7], top[7], accessory[7], shoes[7])
+        # return True
     else:
         print("Fail! Trying again...")
-        create_outfit()
-        return False
+        return create_outfit()
+        #return False
                       		
 def main():
     print("Hello, I'm CLOOLSS!")
@@ -212,7 +239,9 @@ def main():
     print("I am in pre-beta.")
     files = glob.glob('./*.txt')
     # Get the input highs and lows
-    clo_test()
+    my_input_temps = input_temps()
+    my_clo_for_low = my_input_temps[0]
+    my_clo_for_high = my_input_temps[1]
     # I am probably not supposed to be declaring a whole bunch of global 
     # variables in my main function. Figure out better way to do this. 
     global season, clothing_database, possible_bottoms, possible_tops 
@@ -234,9 +263,22 @@ def main():
         if clean_and_in_season(clothing_item):
     	    #print("Item is clean and in season!")
     	    clothing_type(clothing_item)
-    	    #print("I found out what type of clothing")
-    print("About to call create outfit")        
-    create_outfit()
+    #print("I found out what type of clothing")
+    #print("About to call create outfit")
+    # I want to call create outfit, and when create_outfit is successful, 
+    # use its values as arguments to another function.
+    my_outfit_values = create_outfit()
+    print("my_outfit_values", my_outfit_values)    
+    # Call clo_check on outfit and create another outfit if it fails, but stop
+    # after doing this 20 times and give an error message.
+    i=0
+    while (clo_test(
+        my_clo_for_low, my_clo_for_high, my_outfit_values[1], 
+        my_outfit_values[2], my_outfit_values[3], my_outfit_values[4]) != True) and (i<21):
+        my_outfit = create_outfit()
+        if (i == 20):
+            print("Possible seasonality error, you'll have to debug. Sorry!")
+        i = i+1
     print("That's all I can do right now, bye!")	
 
 main()
