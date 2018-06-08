@@ -1,4 +1,4 @@
-# CLothing Organizser/Optimizer Logical Style System
+# CLothing Organizer/Optimizer Logical Style System
 
 This code is in pre-beta, and is primarily a vehicle for learning more Python. 
 CLOOLSS reads in formatted data files of clothing items and gets user input 
