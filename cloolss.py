@@ -132,14 +132,6 @@ def match(thing_collection, new_thing, add_neutrals):
 def convert_to_celsius(temp):
     return((temp - 32)/1.8)
 
-def get_clo(celsius_temp):
-    """ Computes clo value needed for sedentary activieites (ie working in my
-    office) for a given aur temp. Not a lot of info online re clo needed for 
-    office temps. This is based on a chart I found for 10-20 degrees C 
-    (50-68 degrees F).
-    """
-    return(4.15 - 0.15*celsius_temp)    
-
 def input_temps():
     """ TO DO: Not finished. Returns min and max clo values needed for 
     outfit given min/max temps for day. Gets the expected high and low temps 
@@ -165,44 +157,47 @@ def input_temps():
         exit(1)
     low_c = convert_to_celsius(low)
     high_c = convert_to_celsius(high)
-    print("Right now I just convert to Celsius")
-    # TO DO: Learn about formatstrings
-    print("Low in Celsius:", low_c) 
-    print("High in Celsius:", high_c)
-    clo_for_low = get_clo(low_c)
-    clo_for_high = get_clo(high_c)
-    print("Clo needed for low:", clo_for_low) 
-    print("Clo needed for high:", clo_for_high) 
-    return (clo_for_low, clo_for_high)
+    return (low_c, high_c)
 
-# Need to have some of these arguments be optional as outfit is not always 
-# four pieces
-def clo_test(clo_low, clo_high, piece1, piece2, piece3, piece4): 
+def clo_test(high_c, *args): 
     """   
-    Start with basic test that outfit clo is not too high for low or too low 
-    for the high. That is, at some point in the day, the outfit should be 
-    comfortable. Assume wearing socks and underwear. Base clo should be in 
-    the config file eventually so people can customize without changing the 
-    code.
+    Start with basic test based on the expected high and ASHRAE assumptions 
+    based on some UC Berkeley thesis I found online: Winter is when we wear 
+    0.8 to 1.2 clo and office temp is 20-23.6 C. Summer is when we wear 0.33
+    to 0.6 clo and office temp is between 22.8 and 26.2 C. Outfit (without 
+    sweater) should fall within appropriate clo range for the high. Assume 
+    wearing socks and underwear. Base clo should be in the config file 
+    eventually so people can customize without changing the code. Args is 
+    clo values for each piece of the outfit.
     """
     base_clo = 0.06
     outfit_clo = base_clo
-    # Replace this with a for loop looping over each outfit item eventually
-    outfit_clo = outfit_clo + float(piece1) + float(piece2) + float(piece3) + float(piece4)
-    print("Outfit clo is", outfit_clo)
-    if ((outfit_clo < clo_low) and (outfit_clo > clo_high)):  
-        print("Outfit passed clo test!")
-        return True
-    else:   
-        print("Outfit failed clo test!")    
-        return False
+    for t in args:
+        outfit_clo = outfit_clo + float(t)
+    if (high_c < 22.8):
+        if ((outfit_clo > 1.2) or (outfit_clo < 0.8)):
+            print("Outfit failed clo test!", high_c, outfit_clo)
+            return False
+        else:    
+            return True
+    if ((high_c >= 22.8) and (high_c <= 23.6)):
+        if ((outfit_clo > 1.2) or (outfit_clo < 0.33)):
+            print("Outfit failed clo test!", high_c, outfit_clo)
+            return False
+        else:    
+            return True    
+    if (high_c > 23.6):
+        if ((outfit_clo > .6) or ( outfit_clo < 0.33)):
+            print("Outfit failed clo test!", high_c, outfit_clo)
+            return False            
+        else:    
+            return True
 
 def create_outfit():
     """Chooses a random bottom and appends it to (empty) outfit. Chooses a 
     top and calls match function. Append a random accessory and shoe, then
     print outfit as a nested list.
     """
-    # TO DO: Make it stop putting shirts on dresses.
     outfit = []
     choose_bottom = random.randint(0,(len(possible_bottoms)-1))
     #print(choose_bottom)
@@ -210,14 +205,9 @@ def create_outfit():
     #print("Chosen bottom is:")
     #print(bottom)
     outfit.append(bottom)
-    choose_top = random.randint(0,(len(possible_tops)-1))
-    top = possible_tops[choose_top]
-    #print("Chosen top is:")
-    #print(top)
-    # Match with neutrals flag set to get neutral items added to color
-    # collection
-    if match(bottom, top, 0):
-        outfit.append(top)
+    # Here is where we handle the dress thing
+    # To DO: Need accessorize function for less repetition
+    if bottom[0] == 'dress':
         choose_accessory = random.randint(0,(len(possible_accessories)-1))
         accessory = possible_accessories[choose_accessory]
         outfit.append(accessory)
@@ -226,12 +216,24 @@ def create_outfit():
         outfit.append(shoes)
         print("Outfit created! Here's what to wear:")
         print(outfit)
-        return (True, bottom[7], top[7], accessory[7], shoes[7])
-        # return True
-    else:
-        print("Fail! Trying again...")
-        return create_outfit()
-        #return False
+        return (True, bottom[7], accessory[7], shoes[7])
+    else:    
+        choose_top = random.randint(0,(len(possible_tops)-1))
+        top = possible_tops[choose_top]
+        if match(bottom, top, 0):
+            outfit.append(top)
+            choose_accessory = random.randint(0,(len(possible_accessories)-1))
+            accessory = possible_accessories[choose_accessory]
+            outfit.append(accessory)
+            choose_shoes = random.randint(0,(len(possible_shoes)-1))
+            shoes = possible_shoes[choose_shoes]
+            outfit.append(shoes)
+            print("Outfit created! Here's what to wear:")
+            print(outfit)
+            return (True, bottom[7], top[7], accessory[7], shoes[7])
+        else:
+            print("Fail! Trying again...")
+            return create_outfit()
                       		
 def main():
     print("Hello, I'm CLOOLSS!")
@@ -240,7 +242,7 @@ def main():
     files = glob.glob('./*.txt')
     # Get the input highs and lows
     my_input_temps = input_temps()
-    my_clo_for_low = my_input_temps[0]
+    # my_clo_for_low = my_input_temps[0]
     my_clo_for_high = my_input_temps[1]
     # I am probably not supposed to be declaring a whole bunch of global 
     # variables in my main function. Figure out better way to do this. 
@@ -261,22 +263,20 @@ def main():
         clothing_item = open(file).read().splitlines() 
         validate_input()
         if clean_and_in_season(clothing_item):
-    	    #print("Item is clean and in season!")
     	    clothing_type(clothing_item)
-    #print("I found out what type of clothing")
-    #print("About to call create outfit")
-    # I want to call create outfit, and when create_outfit is successful, 
-    # use its values as arguments to another function.
     my_outfit_values = create_outfit()
     print("my_outfit_values", my_outfit_values)    
     # Call clo_check on outfit and create another outfit if it fails, but stop
     # after doing this 20 times and give an error message.
     i=0
-    while (clo_test(
-        my_clo_for_low, my_clo_for_high, my_outfit_values[1], 
-        my_outfit_values[2], my_outfit_values[3], my_outfit_values[4]) != True) and (i<21):
+    # There may be 3 or 4 outfit pieces.
+    optional = 0  
+    if (4 in my_outfit_values):
+        optional = my_outfit_values[4]    
+    while (clo_test(my_input_temps[1], my_outfit_values[1], 
+        my_outfit_values[2], my_outfit_values[3], optional) != True) and (i<21):
         my_outfit = create_outfit()
-        if (i == 20):
+        if (i == 50):
             print("Possible seasonality error, you'll have to debug. Sorry!")
         i = i+1
     print("That's all I can do right now, bye!")	
