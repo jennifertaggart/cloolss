@@ -7,6 +7,7 @@ I am in pre-beta.
 import random
 import glob
 import re
+import unittest
 
 def error_stuff():
     """ Print error message and exit program
@@ -282,6 +283,17 @@ def main():
     print("That's all I can do right now, bye!")	
 
 main()
+
+class TestCloTest(unittest.TestCase):
+
+    def test_convertToCelsius(self):
+        assert convert_to_celsius(32) == 0
+        assert convert_to_celsius(212) == 100
+
+if __name__ == '__main__':
+    unittest.main()
+
+
    
 # TO DO: Implement in js with localstorage for washed/not washed, have a 
 # "did laundry" button that sets everything to washed again
