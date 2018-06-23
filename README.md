@@ -18,25 +18,25 @@ CLOOLSS is run with the Python interpreter. It is written in Python 3. The
 structured data files describing your clothing should live in the same 
 directory as the script, should have a .txt extension, and should be 
 structured as follows:
-Line 1: shirt OR shorts OR pants OR skirt OR dress OR scarf OR shoes
-Line 2: Python list containing all the colors that describe the clothing item
-Line 3: close-fitting OR loose-fitting (program does not use this data yet)
-Line 4: Sleeve length, as a number from 0 to 1
-Line 5: fabric (program does not use this data yet)
-Line 6: rainy season OR dry season
-Line 7: clean OR wash
-Line 8: estimated clo, where 1 clo is the warmth provided by a men's business 
+* Line 1: shirt OR shorts OR pants OR skirt OR dress OR scarf OR shoes
+* Line 2: Python list containing all the colors that describe the clothing item
+* Line 3: close-fitting OR loose-fitting (program does not use this data yet)
+* Line 4: Sleeve length, as a number from 0 to 1
+* Line 5: fabric (program does not use this data yet)
+* Line 6: rainy season OR dry season
+* Line 7: clean OR wash
+* Line 8: estimated clo, where 1 clo is the warmth provided by a men's business 
   suit at room temperature.
 
 Example - file floralshell.txt contains:
-shirt
-['black', 'white', 'pink', 'sea green', 'light green', 'dark green', 'yellow', 'greenish brown']
-loose-fitting
-0
-rayon
-dry season
-clean
-0.08
+  shirt
+  ['black', 'white', 'pink', 'sea green', 'light green', 'dark green', 'yellow', 'greenish brown']
+  loose-fitting
+  0
+  rayon
+  dry season
+  clean
+  0.08
 
 ## Authors and Credits
 
