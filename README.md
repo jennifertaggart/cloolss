@@ -28,15 +28,15 @@ structured as follows:
 * Line 8: estimated clo, where 1 clo is the warmth provided by a men's business 
   suit at room temperature.
 
-Example - file floralshell.txt contains:
- ```shirt```
- ```['black', 'white', 'pink', 'sea green', 'light green', 'dark green', 'yellow', 'greenish brown']```
- ```loose-fitting```
- ```0```
- ```rayon```
- ```dry season```
- ```clean```
- ```0.08```
+Example - file floralshell.txt contains:<br/>
+ shirt<br/>
+ ['black', 'white', 'pink', 'sea green', 'light green', 'dark green', 'yellow', 'greenish brown']<br/>
+ loose-fitting<br/>
+ 0<br/>
+ rayon<br/>
+ dry season<br/>
+ clean<br/>
+ 0.08<br/>
 
 ## Authors and Credits
 
