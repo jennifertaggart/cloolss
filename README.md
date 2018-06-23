@@ -29,14 +29,14 @@ structured as follows:
   suit at room temperature.
 
 Example - file floralshell.txt contains:
-  shirt
-  ['black', 'white', 'pink', 'sea green', 'light green', 'dark green', 'yellow', 'greenish brown']
-  loose-fitting
-  0
-  rayon
-  dry season
-  clean
-  0.08
+ ```shirt```
+ ```['black', 'white', 'pink', 'sea green', 'light green', 'dark green', 'yellow', 'greenish brown']```
+ ```loose-fitting```
+ ```0```
+ ```rayon```
+ ```dry season```
+ ```clean```
+ ```0.08```
 
 ## Authors and Credits
 
